@@ -1,11 +1,24 @@
 <script setup>
+// Получение заявки
+const { data: applicationCard } = await useFetch(
+	'https://crm.m2lab.ru/api/internal/demo/demoLeadCardAccess'
+);
+
+const date = ref(new Date(applicationCard.value.leadData.updatedAt));
+
+const updateDate = ref(
+	('0' + date.value.getDate()).slice(-2) +
+		'.' +
+		('0' + date.value.getMonth()).slice(-2) +
+		'.' +
+		date.value.getFullYear()
+);
+//console.log(applicationCard.value.leadData.updatedAt);
+
 const items = [
 	[
 		{
 			label: 'Редактировать поля',
-		},
-		{
-			label: 'Настройка отображения',
 		},
 	],
 ];
@@ -25,7 +38,7 @@ const editApplication = useEditApplication();
 			<h3 class="text-base font-semibold leading-6 text-gray-950">
 				Заявка с сайта
 			</h3>
-			<p class="text-xs leading-6 text-gray-400">Обновлено: 30.09.2023</p>
+			<p class="text-xs leading-6 text-gray-400">Обновлено: {{ updateDate }}</p>
 		</div>
 
 		<UDropdown
@@ -41,9 +54,11 @@ const editApplication = useEditApplication();
 			/>
 
 			<template #item="{ item }">
-				<span @click="editApplication = !editApplication" class="truncate">{{
-					item.label
-				}}</span>
+				<span
+					@click="editApplication = !editApplication"
+					class="truncate w-full text-start"
+					>{{ item.label }}</span
+				>
 			</template>
 		</UDropdown>
 	</div>

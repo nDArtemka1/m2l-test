@@ -53,7 +53,12 @@ const editApplication = useEditApplication();
 							<HeaderUCard />
 							<BodyUCard />
 							<MainContact />
-							<UButton v-if="editApplication" color="gray" variant="solid" block
+							<UButton
+								v-if="editApplication"
+								@click="editApplication = !editApplication"
+								color="gray"
+								variant="solid"
+								block
 								>Сохранить изменения</UButton
 							>
 						</UCard>

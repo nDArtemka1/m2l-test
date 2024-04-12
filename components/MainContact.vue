@@ -81,7 +81,7 @@ async function search(q: string) {
 	loading.value = true;
 
 	const users = await $fetch<any[]>(
-		'https://jsonplaceholder.typicode.com/users',
+		'https://crm.m2lab.ru/api/internal/demo/demoLeadCardAccess',
 		{ params: { q } }
 	);
 
@@ -107,7 +107,6 @@ async function search(q: string) {
 					<UCheckbox
 						v-model="item.phoneSelectedCheckBox"
 						v-if="item.phoneCheckBox && editApplication"
-						:model-value="false"
 						name="notifications"
 					>
 						<template #label>

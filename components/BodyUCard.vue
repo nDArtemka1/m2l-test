@@ -1,7 +1,10 @@
-<script setup lang="ts">
+<script setup>
 import { format } from 'date-fns';
-
-const date = ref(new Date());
+// Получение заявки
+const { data: applicationCard } = await useFetch(
+	'https://crm.m2lab.ru/api/internal/demo/demoLeadCardAccess'
+);
+const date = ref(new Date(applicationCard.value.leadData.createdAt));
 
 const boardOpen = ref(false);
 const managerOpen = ref(false);
@@ -13,19 +16,19 @@ defineShortcuts({
 
 const loading = ref(false);
 const selected = ref();
-async function search(q: string) {
-	loading.value = true;
+// async function search(q: string) {
+// 	loading.value = true;
 
-	const users = await $fetch<any[]>(
-		'https://jsonplaceholder.typicode.com/users',
-		{ params: { q } }
-	);
+// 	const applicationCard = await $fetch<any[]>(
+// 		'https://jsonplaceholder.typicode.com/users',
+// 		{ params: { q } }
+// 	);
 
-	loading.value = false;
-	selected.value = users[0];
+// 	loading.value = false;
+// 	//selected.value = users[0];
 
-	return users;
-}
+// 	return applicationCard;
+// }
 </script>
 
 <template>
@@ -37,7 +40,7 @@ async function search(q: string) {
 				<UButton
 					class="w-full flex-row-reverse justify-between text-gray-200 [&>span]:text-gray-700 [&>svg]:text-gray-700 hover:text-gray-700 duration-150"
 					icon="i-heroicons-calendar-days-20-solid"
-					:label="format(date, 'd.MM.yyy')"
+					:label="format(date, 'dd.MM.yyy')"
 					variant="outline"
 				/>
 
@@ -49,7 +52,7 @@ async function search(q: string) {
 
 		<div class="grid">
 			<p class="text-sm leading-6 text-gray-400">Доска</p>
-			<UInputMenu
+			<!-- <UInputMenu
 				v-model="selected"
 				:search="search"
 				:loading="loading"
@@ -57,12 +60,12 @@ async function search(q: string) {
 				option-attribute="name"
 				trailing
 				by="id"
-			/>
+			/> -->
 		</div>
 
 		<div class="grid col-span-2">
 			<p class="text-sm leading-6 text-gray-400">Менеджер</p>
-			<UInputMenu
+			<!-- <UInputMenu
 				v-model="selected"
 				:search="search"
 				:loading="loading"
@@ -70,7 +73,7 @@ async function search(q: string) {
 				option-attribute="name"
 				trailing
 				by="id"
-			/>
+			/> -->
 		</div>
 	</div>
 </template>

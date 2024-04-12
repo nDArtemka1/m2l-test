@@ -1,19 +1,6 @@
 <script setup lang="ts">
-import { format } from 'date-fns';
-const date = ref(new Date());
-
 const isOpen = ref(false);
-
-const items = [
-	[
-		{
-			label: 'Редактировать поля',
-		},
-		{
-			label: 'Настройка отображения',
-		},
-	],
-];
+const editApplication = useEditApplication();
 </script>
 
 <template>
@@ -22,7 +9,7 @@ const items = [
 			<UButton
 				class="bg-slate-500 hover:bg-slate-700 duration-150"
 				label="Открыть заявку"
-				@click="isOpen = true"
+				@click="isOpen = !isOpen"
 			/>
 
 			<USlideover v-model="isOpen">
@@ -51,89 +38,24 @@ const items = [
 						</div>
 					</template>
 
-					<div class="h-full">
+					<div class="flex items-center justify-center">
 						<UCard
 							:ui="{
-								base: '',
-								background: 'bg-white dark:bg-gray-900',
-								divide: 'divide-y divide-gray-200 dark:divide-gray-800',
-								ring: 'ring-1 ring-gray-200 dark:ring-gray-800',
+								base: 'w-80',
 								rounded: 'rounded-[5px]',
-								shadow: 'shadow',
 								body: {
-									base: '',
+									base: 'grid gap-2',
 									background: '',
-									padding: 'px-4 py-5 sm:p-2',
-								},
-								header: {
-									base: '',
-									background: '',
-									padding: 'px-4 py-5 sm:px-2',
-								},
-								footer: {
-									base: '',
-									background: '',
-									padding: 'px-4 py-4 sm:px-2',
+									padding: 'sm:p-2 sm:pb-6',
 								},
 							}"
 						>
-							<div class="flex justify-between">
-								<div class="flex flex-col justify-between">
-									<h3
-										class="text-base font-semibold leading-6 text-gray-950 dark:text-white"
-									>
-										Заявка с сайта
-									</h3>
-									<p class="text-xs leading-6 text-gray-400 dark:text-white">
-										Обновлено: 30.09.2023
-									</p>
-								</div>
-
-								<UDropdown
-									:items="items"
-									:popper="{ offsetDistance: -20, placement: 'bottom-start' }"
-								>
-									<UIcon
-										class="w-5 h-5 text-gray-400 dark:text-gray-500"
-										name="i-heroicons-cog-8-tooth"
-										dynamic
-									/>
-
-									<template #item="{ item }">
-										<span class="truncate">{{ item.label }}</span>
-									</template>
-								</UDropdown>
-							</div>
-
-							<div class="h-32">
-								<div class="flex items-center justify-between">
-									<div class="flex flex-col justify-between">
-										<p class="text-sm leading-6 text-gray-400 dark:text-white">
-											Дата создания
-										</p>
-										<UPopover :popper="{ placement: 'bottom-start' }">
-											<UButton
-												icon="i-heroicons-calendar-days-20-solid"
-												:label="format(date, 'd MMM, yyy')"
-											/>
-
-											<template #panel="{ close }">
-												<DatePicker v-model="date" is-required @close="close" />
-											</template>
-										</UPopover>
-									</div>
-
-									<div class="flex flex-col justify-between">
-										<p class="text-sm leading-6 text-gray-400 dark:text-white">
-											Доска
-										</p>
-									</div>
-								</div>
-							</div>
-
-							<template #footer>
-								<div class="h-8"></div>
-							</template>
+							<HeaderUCard />
+							<BodyUCard />
+							<MainContact />
+							<UButton v-if="editApplication" color="gray" variant="solid" block
+								>Сохранить изменения</UButton
+							>
 						</UCard>
 					</div>
 				</UCard>

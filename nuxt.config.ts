@@ -2,4 +2,9 @@
 export default defineNuxtConfig({
 	devtools: { enabled: false },
 	modules: ['@nuxt/ui'],
+	app: {
+		head: {
+			title: 'M2Lab - Test',
+		},
+	},
 });

@@ -1,9 +1,12 @@
 <script setup>
 import { format } from 'date-fns';
+
 // Получение заявки
 const { data: applicationCard } = await useFetch(
 	'https://crm.m2lab.ru/api/internal/demo/demoLeadCardAccess'
 );
+
+// Получение даты создания заявки
 const date = ref(new Date(applicationCard.value.leadData.createdAt));
 
 const boardOpen = ref(false);
@@ -14,21 +17,35 @@ defineShortcuts({
 	b: () => (managerOpen.value = !managerOpen.value),
 });
 
-const loading = ref(false);
-const selected = ref();
-// async function search(q: string) {
-// 	loading.value = true;
+const leadData = ref(applicationCard.value.leadData);
+const reference = ref(applicationCard.value.reference);
+//console.log(leadData);
+// console.log(reference);
 
-// 	const applicationCard = await $fetch<any[]>(
-// 		'https://jsonplaceholder.typicode.com/users',
-// 		{ params: { q } }
-// 	);
+// Получение leadBoards
+const leadBoards = reference.value.leadBoards.map(leadBoard => {
+	//console.log(leadBoard);
+	return leadBoard;
+});
 
-// 	loading.value = false;
-// 	//selected.value = users[0];
+const getLeadBoardsId = leadBoards.filter(
+	item => item.id === leadData.value.board
+);
 
-// 	return applicationCard;
-// }
+const selectedLeadBoards = ref(getLeadBoardsId[0]);
+
+// Получение managerList
+
+const managerList = reference.value.managerList.map(leadBoard => {
+	//console.log(leadBoard);
+	return leadBoard;
+});
+
+const getManagerListId = managerList.filter(
+	item => item.id === leadData.value.manager
+);
+
+const selectedManagerList = ref(getManagerListId[0]);
 </script>
 
 <template>
@@ -52,28 +69,54 @@ const selected = ref();
 
 		<div class="grid">
 			<p class="text-sm leading-6 text-gray-400">Доска</p>
-			<!-- <UInputMenu
-				v-model="selected"
-				:search="search"
-				:loading="loading"
-				placeholder="Search for a user..."
-				option-attribute="name"
-				trailing
-				by="id"
-			/> -->
+			<USelectMenu
+				v-model="selectedLeadBoards"
+				:options="leadBoards"
+				option-attribute="title"
+			>
+				<UButton
+					variant="outline"
+					color="blue"
+					class="flex-1 justify-between text-gray-300"
+				>
+					<span class="text-gray-800">{{ selectedLeadBoards.title }}</span>
+
+					<UIcon
+						name="i-heroicons-chevron-down-20-solid"
+						class="w-5 h-5 transition-transform text-gray-400 dark:text-gray-500"
+					/>
+				</UButton>
+				<template #option="{ option: leadBoard }">
+					<span class="truncate">{{ leadBoard.title }}</span>
+				</template>
+			</USelectMenu>
 		</div>
 
 		<div class="grid col-span-2">
 			<p class="text-sm leading-6 text-gray-400">Менеджер</p>
-			<!-- <UInputMenu
-				v-model="selected"
-				:search="search"
-				:loading="loading"
-				placeholder="Search for a user..."
+			<USelectMenu
+				v-model="selectedManagerList"
+				:options="managerList"
 				option-attribute="name"
-				trailing
-				by="id"
-			/> -->
+			>
+				<UButton
+					variant="outline"
+					color="blue"
+					class="flex-1 justify-between text-gray-300"
+				>
+					<span class="text-gray-800">{{ selectedManagerList.name }}</span>
+
+					<UIcon
+						name="i-heroicons-chevron-down-20-solid"
+						class="w-5 h-5 transition-transform text-gray-400 dark:text-gray-500"
+					/>
+				</UButton>
+
+				<template #option="{ option: manager }">
+					<UAvatar v-if="manager.avatar" :src="manager.avatar" size="2xs" />
+					<span class="truncate">{{ manager.name }}</span>
+				</template>
+			</USelectMenu>
 		</div>
 	</div>
 </template>

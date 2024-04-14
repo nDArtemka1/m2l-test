@@ -9,22 +9,11 @@ const { data: applicationCard } = await useFetch(
 // Получение даты создания заявки
 const date = ref(new Date(applicationCard.value.leadData.createdAt));
 
-const boardOpen = ref(false);
-const managerOpen = ref(false);
-
-defineShortcuts({
-	o: () => (boardOpen.value = !boardOpen.value),
-	b: () => (managerOpen.value = !managerOpen.value),
-});
-
 const leadData = ref(applicationCard.value.leadData);
 const reference = ref(applicationCard.value.reference);
-//console.log(leadData);
-// console.log(reference);
 
 // Получение leadBoards
 const leadBoards = reference.value.leadBoards.map(leadBoard => {
-	//console.log(leadBoard);
 	return leadBoard;
 });
 
@@ -35,9 +24,7 @@ const getLeadBoardsId = leadBoards.filter(
 const selectedLeadBoards = ref(getLeadBoardsId[0]);
 
 // Получение managerList
-
 const managerList = reference.value.managerList.map(leadBoard => {
-	//console.log(leadBoard);
 	return leadBoard;
 });
 
@@ -55,7 +42,7 @@ const selectedManagerList = ref(getManagerListId[0]);
 
 			<UPopover :popper="{ placement: 'bottom-start' }">
 				<UButton
-					class="w-full flex-row-reverse justify-between text-gray-200 [&>span]:text-gray-700 [&>svg]:text-gray-700 hover:text-gray-700 duration-150"
+					class="w-full flex-row-reverse justify-between text-gray-200 [&>span]:text-gray-700 [&>svg]:text-gray-700 hover:text-blue-400 duration-150"
 					icon="i-heroicons-calendar-days-20-solid"
 					:label="format(date, 'dd.MM.yyy')"
 					variant="outline"
@@ -77,13 +64,13 @@ const selectedManagerList = ref(getManagerListId[0]);
 				<UButton
 					variant="outline"
 					color="blue"
-					class="flex-1 justify-between text-gray-300"
+					class="group flex-1 justify-between text-gray-300 duration-150"
 				>
 					<span class="text-gray-800">{{ selectedLeadBoards.title }}</span>
 
 					<UIcon
 						name="i-heroicons-chevron-down-20-solid"
-						class="w-5 h-5 transition-transform text-gray-400 dark:text-gray-500"
+						class="w-5 h-5 transition-transform text-gray-400 group-hover:text-blue-400"
 					/>
 				</UButton>
 				<template #option="{ option: leadBoard }">
@@ -102,13 +89,13 @@ const selectedManagerList = ref(getManagerListId[0]);
 				<UButton
 					variant="outline"
 					color="blue"
-					class="flex-1 justify-between text-gray-300"
+					class="group flex-1 justify-between text-gray-300"
 				>
 					<span class="text-gray-800">{{ selectedManagerList.name }}</span>
 
 					<UIcon
 						name="i-heroicons-chevron-down-20-solid"
-						class="w-5 h-5 transition-transform text-gray-400 dark:text-gray-500"
+						class="w-5 h-5 transition-transform text-gray-400 group-hover:text-blue-400"
 					/>
 				</UButton>
 

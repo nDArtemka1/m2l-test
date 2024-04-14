@@ -1,7 +1,8 @@
 <script setup>
 // Получение заявки
-const { data: applicationCard } = await useFetch(
-	'https://crm.m2lab.ru/api/internal/demo/demoLeadCardAccess'
+const { data: applicationCard, pending } = await useFetch(
+	'https://crm.m2lab.ru/api/internal/demo/demoLeadCardAccess',
+	{ lazy: false }
 );
 
 const date = ref(new Date(applicationCard.value.leadData.updatedAt));
@@ -38,6 +39,7 @@ const editApplication = useEditApplication();
 			<h3 class="text-base font-semibold leading-6 text-gray-950">
 				Заявка с сайта
 			</h3>
+
 			<p class="text-xs leading-6 text-gray-400">Обновлено: {{ updateDate }}</p>
 		</div>
 

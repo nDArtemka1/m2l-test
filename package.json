@@ -11,6 +11,7 @@
 	},
 	"dependencies": {
 		"@nuxt/ui": "^2.15.1",
+		"axios": "^1.6.8",
 		"date-fns": "^2.30.0",
 		"nuxt": "^3.11.2",
 		"v-calendar": "^3.1.2",

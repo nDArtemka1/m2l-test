@@ -1,61 +1,62 @@
 <script setup>
-const isOpen = ref(false);
+// Получение заявки
+const { data: applicationCard } = await useFetch(
+	'https://crm.m2lab.ru/api/internal/demo/demoLeadCardAccess',
+	{
+		lazy: false,
+	}
+);
+
+// Получение leadData и reference
+const leadData = ref(applicationCard.value.leadData);
+const reference = ref(applicationCard.value.reference);
+
+const openAppCard = ref(false);
+
+// Прокидывание данных через компоненты
+provide('appCard', {
+	applicationCard,
+	leadData,
+	reference,
+});
 </script>
 
 <template>
 	<div class="bg-blue-100 w-screen h-screen flex items-center justify-center">
-		<div class="">
-			<UButton
-				class="bg-slate-500 hover:bg-slate-700 duration-150"
-				label="Открыть заявку"
-				@click="isOpen = !isOpen"
-			/>
+		<UButton
+			class="bg-slate-500 hover:bg-slate-700 duration-150"
+			label="Открыть заявку"
+			@click="openAppCard = !openAppCard"
+		/>
 
-			<USlideover v-model="isOpen"
-				><UCard
-					class="flex flex-col flex-1"
-					:ui="{
-						body: { base: 'flex-1' },
-						ring: '',
-						divide: 'divide-y divide-gray-100 dark:divide-gray-800',
-					}"
-				>
-					<template #header>
-						<div class="flex items-center justify-between">
-							<h3
-								class="text-base font-semibold leading-6 text-gray-900 dark:text-white"
-							>
-								Slideover
-							</h3>
-							<UButton
-								color="gray"
-								variant="ghost"
-								icon="i-heroicons-x-mark-20-solid"
-								class="-my-1"
-								@click="isOpen = false"
-							/>
-						</div>
-					</template>
-
-					<div class="flex items-center justify-center">
-						<UCard
-							:ui="{
-								base: 'w-80',
-								rounded: 'rounded-[5px]',
-								body: {
-									base: 'grid gap-2',
-									background: '',
-									padding: 'sm:p-2 sm:pb-6',
-								},
-							}"
-						>
-							<HeaderUCard />
-							<BodyUCard />
-							<MainContact />
-						</UCard>
-					</div>
-				</UCard>
-			</USlideover>
-		</div>
+		<USlideover
+			v-model="openAppCard"
+			:ui="{
+				width: 'max-w-sm',
+			}"
+			><UCard
+				:ui="{
+					rounded: 'rounded-none',
+				}"
+				class="flex flex-col flex-1"
+			>
+				<div class="flex items-center justify-center">
+					<UCard
+						:ui="{
+							base: 'w-80',
+							rounded: 'rounded-[5px]',
+							body: {
+								base: 'grid gap-2',
+								padding: 'sm:p-2 sm:pb-6',
+							},
+						}"
+					>
+						<HeaderUCard :lead-data="leadData" />
+						<BodyUCard />
+						<MainContact :application-card="applicationCard" />
+					</UCard>
+				</div>
+			</UCard>
+		</USlideover>
 	</div>
 </template>

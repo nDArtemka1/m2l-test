@@ -81,23 +81,7 @@ const updateAppCard = async () => {
 				/>
 			</div>
 
-			<div class="grid">
-				<div class="flex items-center justify-between">
-					<p class="text-sm leading-6 text-gray-400">Дата рождения</p>
-				</div>
-				<UPopover :popper="{ placement: 'bottom-start' }">
-					<UButton
-						class="w-full flex-row-reverse justify-between text-gray-200 [&>span]:text-gray-700 [&>svg]:text-gray-700 hover:text-blue-400 duration-150"
-						icon="i-heroicons-calendar-days-20-solid"
-						:label="format(date, 'd.MM.yyy')"
-						variant="outline"
-					/>
-
-					<template #panel="{ close }">
-						<DatePicker v-model="date" is-required @close="close" />
-					</template>
-				</UPopover>
-			</div>
+			<GetDate :title="'Дата рождения'" :updatedAt="true" />
 
 			<div class="grid">
 				<div class="flex items-center justify-between">

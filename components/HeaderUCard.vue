@@ -1,20 +1,12 @@
 <script setup>
-// Получение заявки
-const { data: applicationCard, pending } = await useFetch(
-	'https://crm.m2lab.ru/api/internal/demo/demoLeadCardAccess',
-	{ lazy: false }
-);
+import { format } from 'date-fns';
 
-const date = ref(new Date(applicationCard.value.leadData.updatedAt));
+const props = defineProps({
+	leadData: Object,
+});
 
-const updateDate = ref(
-	('0' + date.value.getDate()).slice(-2) +
-		'.' +
-		('0' + date.value.getMonth()).slice(-2) +
-		'.' +
-		date.value.getFullYear()
-);
-//console.log(applicationCard.value.leadData.updatedAt);
+// Дата обновления заявки
+const updateDate = ref(new Date(props.leadData.updatedAt));
 
 const items = [
 	[
@@ -24,12 +16,14 @@ const items = [
 	],
 ];
 
+// Для связывания данных, чтобы можно было менять стили у шестеренки при открытом UDropdown
 const headerOpenDrop = ref(false);
 
 defineShortcuts({
 	o: () => (headerOpenDrop.value = !headerOpenDrop.value),
 });
 
+// Редактирование заявки
 const editApplication = useEditApplication();
 </script>
 
@@ -39,8 +33,9 @@ const editApplication = useEditApplication();
 			<h3 class="text-base font-semibold leading-6 text-gray-950">
 				Заявка с сайта
 			</h3>
-
-			<p class="text-xs leading-6 text-gray-400">Обновлено: {{ updateDate }}</p>
+			<p class="text-xs leading-6 text-gray-400">
+				Обновлено: {{ format(updateDate, 'MM.dd.yyy') }}
+			</p>
 		</div>
 
 		<UDropdown

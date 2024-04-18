@@ -1,5 +1,5 @@
 <script setup>
-const { leadData, reference } = inject('appCard');
+const { leadData, reference, loading } = inject('appCard');
 
 // Получение managerList
 const managerList = reference.value.managerList.map(manager => {
@@ -16,9 +16,12 @@ const selectedManagerList = ref(getManagerListId[0]);
 <template>
 	<div class="grid col-span-2">
 		<p class="text-sm leading-6 text-gray-400">Менеджер</p>
+		<USkeleton v-if="loading" class="h-4 w-[200px]" />
 		<USelectMenu
+			v-else
 			v-model="selectedManagerList"
 			:options="managerList"
+			:option-avatar="managerList.avatar"
 			option-attribute="name"
 		>
 			<UButton

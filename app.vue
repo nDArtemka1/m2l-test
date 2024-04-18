@@ -1,24 +1,52 @@
 <script setup>
-// Получение заявки
-const { data: applicationCard } = await useFetch(
-	'https://crm.m2lab.ru/api/internal/demo/demoLeadCardAccess',
-	{
-		lazy: false,
+import axios from 'axios';
+
+// Объявление переменной заявки
+const appCard = ref({});
+
+// Объявление leadData, reference, и contacts
+const leadData = ref();
+const reference = ref();
+const contacts = ref({});
+
+const loading = ref(true);
+const error = ref(null);
+
+async function fetchData() {
+	try {
+		loading.value = true;
+		const response = await axios.get(
+			'https://5ec761cf17a971bb.mokky.dev/m2lab'
+		);
+
+		// Положил в appCard первую заявку
+		appCard.value = response.data[0];
+
+		// Присвоение данных leadData, reference, и contacts
+		leadData.value = appCard.value.leadData;
+		reference.value = appCard.value.reference;
+		contacts.value = leadData.value.contacts;
+	} catch (err) {
+		error.value = err.message;
+	} finally {
+		loading.value = false;
 	}
-);
+}
 
-// Получение leadData и reference
-const leadData = ref(applicationCard.value.leadData);
-const reference = ref(applicationCard.value.reference);
-
+// Открытие заявки
 const openAppCard = ref(false);
 
 // Прокидывание данных через компоненты
 provide('appCard', {
-	applicationCard,
+	appCard,
 	leadData,
 	reference,
+	contacts,
+	loading,
+	error,
 });
+
+onMounted(fetchData);
 </script>
 
 <template>
@@ -53,7 +81,7 @@ provide('appCard', {
 					>
 						<HeaderUCard :lead-data="leadData" />
 						<BodyUCard />
-						<MainContact :application-card="applicationCard" />
+						<MainContact />
 					</UCard>
 				</div>
 			</UCard>

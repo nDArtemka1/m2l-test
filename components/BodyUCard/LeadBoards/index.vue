@@ -1,5 +1,5 @@
 <script setup>
-const { leadData, reference } = inject('appCard');
+const { leadData, reference, loading } = inject('appCard');
 
 // Получение leadBoards
 const leadBoards = reference.value.leadBoards.map(leadBoard => {
@@ -16,8 +16,9 @@ const selectedLeadBoards = ref(getLeadBoardsId[0]);
 <template>
 	<div class="grid">
 		<p class="text-sm leading-6 text-gray-400">Доска</p>
-
+		<USkeleton v-if="loading" class="h-4 w-[200px]" />
 		<USelectMenu
+			v-else
 			v-model="selectedLeadBoards"
 			:options="leadBoards"
 			option-attribute="title"

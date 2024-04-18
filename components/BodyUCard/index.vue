@@ -1,6 +1,6 @@
 <template>
 	<div class="grid grid-cols-2 gap-2">
-		<GetDate :title="'Дата создания'" :createdAt="true" />
+		<BodyUCardCreateDate />
 		<BodyUCardLeadBoards />
 		<BodyUCardManagerList />
 	</div>

@@ -4,8 +4,9 @@ import { format } from 'date-fns';
 const props = defineProps({
 	leadData: Object,
 });
+const { loading } = inject('appCard');
 
-// Дата обновления заявки
+// Дата обновления заявки,!!!! не считываеь updatedAt из-за обновления даты 17.04.2024 поэтому решил поставить createdAt, возможно из-за разницы в часовых поясах, - изменено: оставил updatedAt
 const updateDate = ref(new Date(props.leadData.updatedAt));
 
 const items = [
@@ -33,7 +34,8 @@ const editApplication = useEditApplication();
 			<h3 class="text-base font-semibold leading-6 text-gray-950">
 				Заявка с сайта
 			</h3>
-			<p class="text-xs leading-6 text-gray-400">
+			<USkeleton v-if="loading" class="h-4 w-[150px]" />
+			<p v-else class="text-xs leading-6 text-gray-400">
 				Обновлено: {{ format(updateDate, 'MM.dd.yyy') }}
 			</p>
 		</div>

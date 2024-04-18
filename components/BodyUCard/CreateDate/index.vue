@@ -1,4 +1,5 @@
 <script setup>
+// ---------------!!!!! Не обязательный компонет !!!!!-----------
 import { format } from 'date-fns';
 
 const { leadData } = inject('appCard');
